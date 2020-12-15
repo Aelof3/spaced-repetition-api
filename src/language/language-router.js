@@ -80,17 +80,20 @@ languageRouter.post("/guess", parser, async (req, res, next) => {
 
     if (checkGuess.translation === guess) {
       //if guess is correct, double the memory value and add a correct counter value
-      const mv = list.head.value.memory_value * 2;
+      let mv = list.head.value.memory_value * 2;
       list.head.value.memory_value = mv;
       list.head.value.correct_count++;
 
       //send the correctly guessed word to the back of list
       let curr = list.head;
-      let count = mv;
-      while (count > 0 && curr.next !== null) {
+      let count = 0;
+      
+      while (count < mv && curr.next !== null) {
         curr = curr.next;
-        count--;
+        //console.log(count,mv,curr);
+        count += 1;
       }
+      
       const answer = new _Node(list.head.value);
       if (curr.next === null) {
         answer.next = curr.next;

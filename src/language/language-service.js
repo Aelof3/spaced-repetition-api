@@ -74,8 +74,8 @@ const LanguageService = {
       } else {
         currentWord = words.find((word) => word.id === nextIdx);
       }
-      return list;
     }
+    return list;
   },
   updateTables(db, words, language_id, total_score) {
     return db.transaction(async (trx) => {
