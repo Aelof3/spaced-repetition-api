@@ -1,6 +1,6 @@
 # Spaced repetition API!
 
-### Live link: tbd
+### Live link: https://spaced-repetition-eight.vercel.app
 ### Client repo: https://github.com/Aelof3/spaced-repetition
 ### Server repo: https://github.com/Aelof3/spaced-repetition-api
 
