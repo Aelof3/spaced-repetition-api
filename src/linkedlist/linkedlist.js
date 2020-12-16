@@ -22,7 +22,31 @@ class LinkedList {
       tempNode.next = new _Node(item, null);
     }
   }
+  sendBackM(mv){
+      let count = 0;
+      let curr = this.head;
 
+      while (count < mv && curr.next !== null) {
+        curr = curr.next;
+        count += 1;
+      }
+      
+      const answer = new _Node(this.head.value);
+      if (curr.next === null) {
+        answer.next = curr.next;
+        curr.next = answer;
+        this.head = this.head.next;
+        curr.value.next = answer.value.id;
+        answer.value.next = null;
+      } else {
+        answer.next = curr.next;
+        curr.next = answer;
+        this.head = this.head.next;
+        curr.value.next = answer.value.id;
+        answer.value.next = answer.next.value.id;
+      }
+      return answer;
+  }
   insertBefore(value, search) {
     //inserts a new node BEFORE a given node
     let temp = this.head;
@@ -118,4 +142,4 @@ function makeArray(ll) {
   return result;
 }
 
-module.exports = { LinkedList, _Node, makeArray };
+module.exports = { LinkedList, makeArray };

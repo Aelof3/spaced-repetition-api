@@ -2,7 +2,7 @@ const express = require("express");
 const LanguageService = require("./language-service");
 const { requireAuth } = require("../middleware/jwt-auth");
 const parser = express.json();
-const { _Node, makeArray } = require("../linkedlist/linkedlist");
+const { makeArray } = require("../linkedlist/linkedlist");
 
 const languageRouter = express.Router();
 
@@ -85,30 +85,11 @@ languageRouter.post("/guess", parser, async (req, res, next) => {
       list.head.value.correct_count++;
 
       //send the correctly guessed word to the back of list
-      let curr = list.head;
-      let count = 0;
       
-      while (count < mv && curr.next !== null) {
-        curr = curr.next;
-        //console.log(count,mv,curr);
-        count += 1;
-      }
+      const answer = list.sendBackM(mv);
       
-      const answer = new _Node(list.head.value);
-      if (curr.next === null) {
-        answer.next = curr.next;
-        curr.next = answer;
-        list.head = list.head.next;
-        curr.value.next = answer.value.id;
-        answer.value.next = null;
-      } else {
-        answer.next = curr.next;
-        curr.next = answer;
-        list.head = list.head.next;
-        curr.value.next = answer.value.id;
-        answer.value.next = answer.next.value.id;
-      }
       total_score++;
+
       await LanguageService.updateTables(
         db,
         makeArray(list),
@@ -127,19 +108,9 @@ languageRouter.post("/guess", parser, async (req, res, next) => {
       //incorrect guess
       list.head.value.memory_value = 1;
       list.head.value.incorrect_count++;
-
-      let curr = list.head;
-      let count = 1;
-      while (count > 0) {
-        curr = curr.next;
-        count--;
-      }
-      const answer = new _Node(list.head.value);
-      answer.next = curr.next;
-      curr.next = answer;
-      list.head = list.head.next;
-      curr.value.next = answer.value.id;
-      answer.value.next = answer.next.value.id;
+      
+      const answer = list.sendBackM(1);
+      
       await LanguageService.updateTables(
         db,
         makeArray(list),
